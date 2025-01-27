@@ -24,11 +24,15 @@ force_replace=False, timeout=60, filter="",resize=None, verbose=True):
         if Path.is_dir(image_dir):
             shutil.rmtree(image_dir)
 
-    # check directory and create if necessary
+    # Si le dossier existe déjà, on ignore
+    if Path.is_dir(image_dir):
+        if verbose:
+            print(f"[%] Directory {str(image_dir.absolute())} already exists, skipping download")
+        return
+    
+    # Sinon on crée le dossier
     try:
-        if not Path.is_dir(image_dir):
-            Path.mkdir(image_dir, parents=True)
-
+        Path.mkdir(image_dir, parents=True)
     except Exception as e:
         print('[Error]Failed to create directory.', e)
         sys.exit(1)
